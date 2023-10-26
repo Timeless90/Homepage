@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-w%o3a1-(0!!83vamb+7fbs#7^*emst954o7x3ehcmfuwwzxos4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://lively-grass-036771403.4.azurestaticapps.net']
 
 
 # Application definition
@@ -43,9 +43,12 @@ INSTALLED_APPS = [
     'dashboard',
 ]
 
+ALLOWED_HOSTS = ['*']
+
 MIDDLEWARE = [
     'django_browser_reload.middleware.BrowserReloadMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -123,11 +126,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Add azure web app as trusted CRSF
+CRSF_TRUSTED_ORIGINS = ["https://lively-grass-036771403.4.azurestaticapps.net"]

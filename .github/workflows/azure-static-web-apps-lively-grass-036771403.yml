@@ -29,6 +29,7 @@ jobs:
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           app_location: "/." # App source code path
+          skip_app_build: true # Skips build if true. False by default
           
           # api_location: "api" # Api source code path - optional
           # output_location: "" # Built app content directory - optional
@@ -45,5 +46,6 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_LIVELY_GRASS_036771403 }}
           action: "close"
+          app_location: "/." # App source code path
 
   

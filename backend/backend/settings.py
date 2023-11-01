@@ -28,8 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-
+ALLOWED_HOSTS = ['*'
 ]
 
 
@@ -88,7 +87,7 @@ DATABASES = {
         'HOST': config('DB_SERVER'),
         'PORT': '1433',
         'OPTIONS': {
-            'driver': 'ODBC Driver 18 for SQL Server',
+            'driver': 'ODBC Driver 17 for SQL Server',
         },
     }
 }

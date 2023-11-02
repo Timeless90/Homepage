@@ -8,8 +8,17 @@
 from django.db import models
 
 
+## Development Class
+class DevelopmentModel(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+
 class Address(models.Model):
-    addressid = models.IntegerField(db_column='AddressID')  # Field name made lowercase.
+    addressid = models.IntegerField(db_column='AddressID', primary_key=True)  # Field name made lowercase.
     addressline1 = models.CharField(db_column='AddressLine1', max_length=60)  # Field name made lowercase.
     addressline2 = models.CharField(db_column='AddressLine2', max_length=60, blank=True, null=True)  # Field name made lowercase.
     city = models.CharField(db_column='City', max_length=30)  # Field name made lowercase.
@@ -25,7 +34,7 @@ class Address(models.Model):
 
 
 class Customer(models.Model):
-    customerid = models.IntegerField(db_column='CustomerID')  # Field name made lowercase.
+    id = models.BigAutoField(db_column='id', primary_key=True)  # Field name made lowercase.
     namestyle = models.BooleanField(db_column='NameStyle')  # Field name made lowercase.
     title = models.CharField(db_column='Title', max_length=8, blank=True, null=True)  # Field name made lowercase.
     firstname = models.CharField(db_column='FirstName', max_length=50)  # Field name made lowercase.
@@ -39,7 +48,7 @@ class Customer(models.Model):
     passwordhash = models.CharField(db_column='PasswordHash', max_length=128)  # Field name made lowercase.
     passwordsalt = models.CharField(db_column='PasswordSalt', max_length=10)  # Field name made lowercase.
     rowguid = models.CharField(max_length=36)
-    modifieddate = models.DateTimeField(db_column='ModifiedDate')  # Field name made lowercase.
+    modifieddate = models.DateTimeField(db_column='ModifiedDate', null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -47,8 +56,8 @@ class Customer(models.Model):
 
 
 class Customeraddress(models.Model):
-    customerid = models.IntegerField(db_column='CustomerID')  # Field name made lowercase.
-    addressid = models.IntegerField(db_column='AddressID')  # Field name made lowercase.
+    addressid = models.IntegerField(db_column='AddressID', primary_key=True)  # Field name made lowercase.
+    customerid = models.ForeignKey(db_column='CustomerID', to=Customer, on_delete=models.DO_NOTHING)  # Field name made lowercase.
     addresstype = models.CharField(db_column='AddressType', max_length=50)  # Field name made lowercase.
     rowguid = models.CharField(max_length=36)
     modifieddate = models.DateTimeField(db_column='ModifiedDate')  # Field name made lowercase.
@@ -59,7 +68,7 @@ class Customeraddress(models.Model):
 
 
 class Product(models.Model):
-    productid = models.IntegerField(db_column='ProductID')  # Field name made lowercase.
+    productid = models.IntegerField(db_column='ProductID', primary_key=True)  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=50)  # Field name made lowercase.
     productnumber = models.CharField(db_column='ProductNumber', max_length=25)  # Field name made lowercase.
     color = models.CharField(db_column='Color', max_length=15, blank=True, null=True)  # Field name made lowercase.
@@ -83,7 +92,7 @@ class Product(models.Model):
 
 
 class Productcategory(models.Model):
-    productcategoryid = models.IntegerField(db_column='ProductCategoryID')  # Field name made lowercase.
+    productcategoryid = models.IntegerField(db_column='ProductCategoryID', primary_key=True)  # Field name made lowercase.
     parentproductcategoryid = models.IntegerField(db_column='ParentProductCategoryID', blank=True, null=True)  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=50)  # Field name made lowercase.
     rowguid = models.CharField(max_length=36)
@@ -95,7 +104,7 @@ class Productcategory(models.Model):
 
 
 class Productdescription(models.Model):
-    productdescriptionid = models.IntegerField(db_column='ProductDescriptionID')  # Field name made lowercase.
+    productdescriptionid = models.IntegerField(db_column='ProductDescriptionID', primary_key=True)  # Field name made lowercase.
     description = models.CharField(db_column='Description', max_length=400)  # Field name made lowercase.
     rowguid = models.CharField(max_length=36)
     modifieddate = models.DateTimeField(db_column='ModifiedDate')  # Field name made lowercase.
@@ -106,7 +115,7 @@ class Productdescription(models.Model):
 
 
 class Productmodel(models.Model):
-    productmodelid = models.IntegerField(db_column='ProductModelID')  # Field name made lowercase.
+    productmodelid = models.IntegerField(db_column='ProductModelID', primary_key=True)  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=50)  # Field name made lowercase.
     catalogdescription = models.TextField(db_column='CatalogDescription', blank=True, null=True)  # Field name made lowercase. This field type is a guess.
     rowguid = models.CharField(max_length=36)
@@ -119,24 +128,9 @@ class Productmodel(models.Model):
 # The error was: Table ProductModelDescription does not exist.
 
 
-class Salesorderdetail(models.Model):
-    salesorderid = models.IntegerField(db_column='SalesOrderID')  # Field name made lowercase.
-    salesorderdetailid = models.IntegerField(db_column='SalesOrderDetailID')  # Field name made lowercase.
-    orderqty = models.SmallIntegerField(db_column='OrderQty')  # Field name made lowercase.
-    productid = models.IntegerField(db_column='ProductID')  # Field name made lowercase.
-    unitprice = models.DecimalField(db_column='UnitPrice', max_digits=19, decimal_places=4)  # Field name made lowercase.
-    unitpricediscount = models.DecimalField(db_column='UnitPriceDiscount', max_digits=19, decimal_places=4)  # Field name made lowercase.
-    linetotal = models.DecimalField(db_column='LineTotal', max_digits=38, decimal_places=6)  # Field name made lowercase.
-    rowguid = models.CharField(max_length=36)
-    modifieddate = models.DateTimeField(db_column='ModifiedDate')  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'SalesOrderDetail'
-
-
 class Salesorderheader(models.Model):
-    salesorderid = models.IntegerField(db_column='SalesOrderID')  # Field name made lowercase.
+    salesorderid = models.IntegerField(db_column='SalesOrderID', primary_key=True)  # Field name made lowercase.
+    customerid = models.ForeignKey(db_column='CustomerID', to=Customer, on_delete=models.DO_NOTHING)  # Field name made lowercase.
     revisionnumber = models.SmallIntegerField(db_column='RevisionNumber')  # Field name made lowercase.
     orderdate = models.DateTimeField(db_column='OrderDate')  # Field name made lowercase.
     duedate = models.DateTimeField(db_column='DueDate')  # Field name made lowercase.
@@ -146,7 +140,6 @@ class Salesorderheader(models.Model):
     salesordernumber = models.CharField(db_column='SalesOrderNumber', max_length=25)  # Field name made lowercase.
     purchaseordernumber = models.CharField(db_column='PurchaseOrderNumber', max_length=25, blank=True, null=True)  # Field name made lowercase.
     accountnumber = models.CharField(db_column='AccountNumber', max_length=15, blank=True, null=True)  # Field name made lowercase.
-    customerid = models.IntegerField(db_column='CustomerID')  # Field name made lowercase.
     shiptoaddressid = models.IntegerField(db_column='ShipToAddressID', blank=True, null=True)  # Field name made lowercase.
     billtoaddressid = models.IntegerField(db_column='BillToAddressID', blank=True, null=True)  # Field name made lowercase.
     shipmethod = models.CharField(db_column='ShipMethod', max_length=50)  # Field name made lowercase.
@@ -162,3 +155,18 @@ class Salesorderheader(models.Model):
     class Meta:
         managed = False
         db_table = 'SalesOrderHeader'
+
+class Salesorderdetail(models.Model):
+    salesorderdetailid = models.IntegerField(db_column='SalesOrderDetailID', primary_key=True)  # Field name made lowercase.
+    salesorderid = models.ForeignKey(db_column='SalesOrderID', to=Salesorderheader, on_delete=models.DO_NOTHING)  # Field name made lowercase.
+    productid = models.ForeignKey(db_column='ProductID', to=Product, on_delete=models.DO_NOTHING)  # Field name made lowercase.
+    orderqty = models.SmallIntegerField(db_column='OrderQty')  # Field name made lowercase.
+    unitprice = models.DecimalField(db_column='UnitPrice', max_digits=19, decimal_places=4)  # Field name made lowercase.
+    unitpricediscount = models.DecimalField(db_column='UnitPriceDiscount', max_digits=19, decimal_places=4)  # Field name made lowercase.
+    linetotal = models.DecimalField(db_column='LineTotal', max_digits=38, decimal_places=6)  # Field name made lowercase.
+    rowguid = models.CharField(max_length=36)
+    modifieddate = models.DateTimeField(db_column='ModifiedDate')  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'SalesOrderDetail'
